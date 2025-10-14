@@ -1,10 +1,5 @@
 """Simple Telegram bot that renders received text into an image using random fonts."""
 import os
-import asyncio
-import logging
-from typing import Dict, Any
-from datetime import datetime, timedelta
-from collections import defaultdict
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
@@ -15,83 +10,15 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler
 import uuid
 
-# Configure logging
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
 
+# Session store for /text pagination: session_id -> {variants, page, per_page, user_id}
+SESSIONS: dict[str, dict] = {}
 
-# Session store with timestamps for cleanup
-class SessionManager:
-    def __init__(self, cleanup_interval: int = 3600):
-        self.sessions: Dict[str, Dict[str, Any]] = {}
-        self.cleanup_interval = cleanup_interval
-        self.last_cleanup = datetime.now()
-
-    def add_session(self, session_id: str, data: Dict[str, Any]) -> None:
-        """Add new session with timestamp."""
-        self.sessions[session_id] = {
-            **data,
-            'created_at': datetime.now()
-        }
-        self._maybe_cleanup()
-
-    def get_session(self, session_id: str) -> Dict[str, Any] | None:
-        """Get session if exists and not expired."""
-        if session_id in self.sessions:
-            session = self.sessions[session_id]
-            if datetime.now() - session['created_at'] < timedelta(hours=24):
-                return session
-            del self.sessions[session_id]
-        return None
-
-    def _maybe_cleanup(self) -> None:
-        """Cleanup expired sessions periodically."""
-        now = datetime.now()
-        if (now - self.last_cleanup).seconds < self.cleanup_interval:
-            return
-        
-        self.last_cleanup = now
-        expired = datetime.now() - timedelta(hours=24)
-        
-        # Use list to avoid runtime modification during iteration
-        for sid, session in list(self.sessions.items()):
-            if session['created_at'] < expired:
-                del self.sessions[sid]
-
-
-# Rate limiting for message processing
-class RateLimiter:
-    def __init__(self, max_requests: int = 5, time_window: int = 60):
-        self.max_requests = max_requests
-        self.time_window = time_window  # in seconds
-        self.requests = defaultdict(list)
-
-    async def can_process(self, user_id: int) -> bool:
-        """Check if user hasn't exceeded rate limit."""
-        now = datetime.now()
-        user_requests = self.requests[user_id]
-        
-        # Remove old requests
-        while user_requests and (now - user_requests[0]).seconds > self.time_window:
-            user_requests.pop(0)
-        
-        # Check if user can make new request
-        if len(user_requests) < self.max_requests:
-            user_requests.append(now)
-            return True
-        return False
-
-
-# Initialize managers
-SESSIONS = SessionManager()
-RATE_LIMITER = RateLimiter()
 
 # Simple in-memory user language store: user_id -> lang_code
 USER_LANG: dict[int, str] = {}
 
-# Load environment variables
+
 load_dotenv()
 
 
@@ -191,7 +118,7 @@ async def callback_session_nav(update: Update, context: ContextTypes.DEFAULT_TYP
     if ':' not in data:
         return
     session_id, action = data.split(':', 1)
-    sess = SESSIONS.get_session(session_id)
+    sess = SESSIONS.get(session_id)
     if not sess:
         await query.edit_message_text('Session expired or not found')
         return
@@ -232,15 +159,8 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not text:
         return
     
+    # Check subscription first
     user_id = update.effective_user.id
-    
-    # Check rate limit first
-    if not await RATE_LIMITER.can_process(user_id):
-        code = USER_LANG.get(user_id, 'en')
-        await update.message.reply_text("⚠️ Please wait a moment before sending another message.")
-        return
-    
-    # Check subscription
     is_subscribed = await check_subscription(user_id, context.bot)
     if not is_subscribed:
         code = USER_LANG.get(user_id, 'en')
@@ -252,18 +172,11 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=keyboard
         )
         return
-    
-    # Use asyncio.get_event_loop().run_in_executor for CPU-intensive tasks
-    loop = asyncio.get_event_loop()
-    try:
-        # Generate variants in a thread pool to avoid blocking
-        variants = await loop.run_in_executor(None, generate_variants, text, 50)
-        if not variants:
-            await update.message.reply_text('No variants generated')
-            return
-    except Exception as e:
-        logging.error(f"Error generating variants: {e}")
-        await update.message.reply_text("Sorry, an error occurred while generating variants. Please try again.")
+        
+    # Always produce 50 textual variants (10 pages × 5 variants per page)
+    variants = generate_variants(text, max_variants=50)
+    if not variants:
+        await update.message.reply_text('No variants generated')
         return
     session_id = str(uuid.uuid4())
     SESSIONS[session_id] = {'variants': variants, 'page': 0, 'per_page': 5, 'user_id': update.effective_user.id}
