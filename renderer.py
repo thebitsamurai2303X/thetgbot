@@ -15,12 +15,32 @@ def list_fonts() -> list[str]:
     return [os.path.join(FONTS_DIR, f) for f in os.listdir(FONTS_DIR) if f.lower().endswith(('.ttf', '.otf'))]
 
 
-def pick_font(size: int = 72) -> str:
+def pick_font(size: int = 72, text: str = None) -> str:
     fonts = list_fonts()
     if not fonts:
         # return None to indicate no external fonts available
         return None
-    return random.choice(fonts)
+        
+    # Check if text contains Cyrillic characters
+    has_cyrillic = any(ord('а') <= ord(c) <= ord('я') or ord('А') <= ord(c) <= ord('Я') for c in text) if text else False
+    
+    # Filter fonts that support needed characters
+    suitable_fonts = []
+    for font_path in fonts:
+        try:
+            font = ImageFont.truetype(font_path, size=size)
+            # Test if font supports the first character of the text (as a basic check)
+            if text and text[0]:
+                if font.getmask(text[0]):
+                    suitable_fonts.append(font_path)
+            else:
+                suitable_fonts.append(font_path)
+        except Exception:
+            continue
+    
+    if suitable_fonts:
+        return random.choice(suitable_fonts)
+    return random.choice(fonts)  # Fallback to any font if no suitable ones found
 
 
 def measure_text(text: str, font: ImageFont.FreeTypeFont) -> Tuple[int,int]:

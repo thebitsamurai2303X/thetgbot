@@ -125,16 +125,28 @@ async def callback_session_nav(update: Update, context: ContextTypes.DEFAULT_TYP
     if update.effective_user.id != sess.get('user_id'):
         await query.answer('This session is not yours', show_alert=True)
         return
-    per = sess.get('per_page', 5)
+        
+    # Fixed number of items per page and total pages
+    per = 5  # 5 variants per page
     total = len(sess['variants'])
-    pages = (total + per - 1) // per
+    pages = 8  # Always maintain 8 pages
     if action == 'next':
         sess['page'] = (sess.get('page', 0) + 1) % pages
     elif action == 'prev':
         sess['page'] = (sess.get('page', 0) - 1) % pages
     page = sess.get('page', 0)
+    
+    # Calculate start and end indices ensuring we have variants for all pages
     start = page * per
-    end = min(start + per, total)
+    end = start + per
+    
+    # If we're beyond our variants, generate more
+    while len(sess['variants']) < end:
+        # Add more variants using combining characters or other transformations
+        base_text = sess['original_text']
+        new_variant = ''.join(c + chr(0x0300 + random.randint(0, 0x6F)) for c in base_text)
+        sess['variants'].append(new_variant)
+    
     chunk = sess['variants'][start:end]
 
     # Just show page number in text, variants will be clickable buttons
@@ -158,6 +170,12 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (update.message.text or '').strip()
     if not text:
         return
+        
+    # Detect text language
+    has_cyrillic = any(ord('а') <= ord(c) <= ord('я') or ord('А') <= ord(c) <= ord('Я') for c in text)
+    
+    # Generate more variants to fill 8 pages with 5 variants each (40 total)
+    max_variants = 40  # 8 pages × 5 variants per page
     
     # Check subscription first
     user_id = update.effective_user.id
@@ -173,8 +191,8 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
         
-    # Always produce 50 textual variants (10 pages × 5 variants per page)
-    variants = generate_variants(text, max_variants=50)
+    # Generate variants for 8 pages with 5 variants each
+    variants = generate_variants(text, max_variants=max_variants)
     if not variants:
         await update.message.reply_text('No variants generated')
         return

@@ -39,6 +39,58 @@ def _map_from_pairs(name: str, pairs: Dict[str, str]):
 
 
 def init_styles():
+    # Create multiple Russian style maps
+    for style_index in range(8):  # Create 8 different Russian style maps
+        russian_stylish_map = {}
+        russian_chars = {
+            'а': ['𝒂', '𝓪', '𝔞', '𝕒', '𝖆', '𝗮', '𝘢', '𝙖'],
+            'б': ['б', 'б̀', 'б̂', 'б̃', 'б̄', 'б̅', 'б̈', 'б̋'],
+            'в': ['в', 'в̀', 'в̂', 'в̃', 'в̄', 'в̅', 'в̈', 'в̋'],
+        'г': ['г', 'г̀', 'г̂', 'г̃', 'г̄', 'г̅', 'г̈', 'г̋', 'г̌'],
+        'д': ['д', 'д̀', 'д̂', 'д̃', 'д̄', 'д̅', 'д̈', 'д̋', 'д̌'],
+        'е': ['𝒆', '𝓮', '𝔢', '𝕖', '𝖊', '𝗲', '𝘦', '𝙚', '𝚎'],
+        'ё': ['ё', 'ё̀', 'ё̂', 'ё̃', 'ё̄', 'ё̅', 'ё̈', 'ё̋', 'ё̌'],
+        'ж': ['ж', 'ж̀', 'ж̂', 'ж̃', 'ж̄', 'ж̅', 'ӝ', 'ж̋', 'ж̌'],
+        'з': ['з', 'з̀', 'з̂', 'з̃', 'з̄', 'з̅', 'ӟ', 'з̋', 'з̌'],
+        'и': ['и', 'ѝ', 'и̂', 'и̃', 'ӣ', 'и̅', 'ӥ', 'и̋', 'и̌'],
+        'й': ['й', 'й̀', 'й̂', 'й̃', 'й̄', 'й̅', 'й̈', 'й̋', 'й̌'],
+        'к': ['к', 'к̀', 'к̂', 'к̃', 'к̄', 'к̅', 'к̈', 'к̋', 'к̌'],
+        'л': ['л', 'л̀', 'л̂', 'л̃', 'л̄', 'л̅', 'л̈', 'л̋', 'л̌'],
+        'м': ['м', 'м̀', 'м̂', 'м̃', 'м̄', 'м̅', 'м̈', 'м̋', 'м̌'],
+        'н': ['н', 'н̀', 'н̂', 'н̃', 'н̄', 'н̅', 'н̈', 'н̋', 'н̌'],
+        'о': ['𝒐', '𝓸', '𝔬', '𝕠', '𝖔', '𝗼', '𝘰', '𝙤', '𝚘'],
+        'п': ['п', 'п̀', 'п̂', 'п̃', 'п̄', 'п̅', 'п̈', 'п̋', 'п̌'],
+        'р': ['р', 'р̀', 'р̂', 'р̃', 'р̄', 'р̅', 'р̈', 'р̋', 'р̌'],
+        'с': ['с', 'с̀', 'с̂', 'с̃', 'с̄', 'с̅', 'с̈', 'с̋', 'с̌'],
+        'т': ['т', 'т̀', 'т̂', 'т̃', 'т̄', 'т̅', 'т̈', 'т̋', 'т̌'],
+        'у': ['у', 'у̀', 'у̂', 'у̃', 'ӯ', 'у̅', 'ӱ', 'ӳ', 'у̌'],
+        'ф': ['ф', 'ф̀', 'ф̂', 'ф̃', 'ф̄', 'ф̅', 'ф̈', 'ф̋', 'ф̌'],
+        'х': ['х', 'х̀', 'х̂', 'х̃', 'х̄', 'х̅', 'х̈', 'х̋', 'х̌'],
+        'ц': ['ц', 'ц̀', 'ц̂', 'ц̃', 'ц̄', 'ц̅', 'ц̈', 'ц̋', 'ц̌'],
+        'ч': ['ч', 'ч̀', 'ч̂', 'ч̃', 'ч̄', 'ч̅', 'ӵ', 'ч̋', 'ч̌'],
+        'ш': ['ш', 'ш̀', 'ш̂', 'ш̃', 'ш̄', 'ш̅', 'ш̈', 'ш̋', 'ш̌'],
+        'щ': ['щ', 'щ̀', 'щ̂', 'щ̃', 'щ̄', 'щ̅', 'щ̈', 'щ̋', 'щ̌'],
+        'ъ': ['ъ', 'ъ̀', 'ъ̂', 'ъ̃', 'ъ̄', 'ъ̅', 'ъ̈', 'ъ̋', 'ъ̌'],
+        'ы': ['ы', 'ы̀', 'ы̂', 'ы̃', 'ы̄', 'ы̅', 'ӹ', 'ы̋', 'ы̌'],
+        'ь': ['ь', 'ь̀', 'ь̂', 'ь̃', 'ь̄', 'ь̅', 'ь̈', 'ь̋', 'ь̌'],
+        'э': ['э', 'э̀', 'э̂', 'э̃', 'э̄', 'э̅', 'ӭ', 'э̋', 'э̌'],
+        'ю': ['ю', 'ю̀', 'ю̂', 'ю̃', 'ю̄', 'ю̅', 'ю̈', 'ю̋', 'ю̌'],
+        'я': ['я', 'я̀', 'я̂', 'я̃', 'я̄', 'я̅', 'я̈', 'я̋', 'я̌']
+    }
+    
+        for char, variants in russian_chars.items():
+            if style_index < len(variants):
+                variant = variants[style_index]
+                russian_stylish_map[ord(char)] = variant
+                russian_stylish_map[ord(char.upper())] = variant.upper()
+            else:
+                # If we don't have enough variants, use combining characters
+                base = char
+                russian_stylish_map[ord(char)] = base + chr(0x0300 + style_index % 8)
+                russian_stylish_map[ord(char.upper())] = base.upper() + chr(0x0300 + style_index % 8)
+        _styles[f'russian_style_{style_index + 1}'] = russian_stylish_map.copy()
+
+    # Regular styles
     # Fancy script style
     script_map = {}
     for i in range(26):
@@ -203,51 +255,80 @@ def _leet(text: str) -> str:
     return ''.join(m.get(c, c) for c in text)
 
 
-def generate_variants(text: str, max_variants: int = 12) -> list[str]:
+def generate_variants(text: str, max_variants: int = 40) -> list[str]:
     """Return a list of textual 'font' variants for the given text.
 
-    Variants include: unicode style transforms (from _styles), ascii art (pyfiglet),
-    leet, and combining diacritics mixes.
+    Generates exactly max_variants unique variations using various transformations.
+    For Russian text, includes additional Cyrillic-specific transformations.
     """
-    variants = []
-    # Unicode styles
-    for style in available_styles():
+    # Detect if text contains Russian characters
+    has_cyrillic = any(ord('а') <= ord(c) <= ord('я') or ord('А') <= ord(c) <= ord('Я') for c in text)
+    
+    variants = set()  # Use set to ensure uniqueness
+    
+    # Get all available styles
+    all_styles = available_styles()
+    
+    # Organize styles based on text content
+    if has_cyrillic:
+        # Put Russian styles first for Cyrillic text
+        russian_styles = [s for s in all_styles if s.startswith('russian_style_')]
+        other_styles = [s for s in all_styles if not s.startswith('russian_style_')]
+        styles_to_try = russian_styles + other_styles
+    else:
+        styles_to_try = all_styles
+    
+    # Apply style transforms
+    for style in styles_to_try:
         try:
-            variants.append(transform(text, style))
+            variant = transform(text, style)
+            if variant != text:  # Only add if the transform actually changed something
+                variants.add(variant)
         except Exception:
             continue
-        if len(variants) >= max_variants:
-            return variants
+            
+    # Add combining diacritics variants
+    for intensity in range(1, 4):
+        variants.add(_apply_combining(text, intensity=intensity))
+        
+    # Add leet speak variant
+    variants.add(_leet(text))
 
-    # leet
-    variants.append(_leet(text))
-    if len(variants) >= max_variants:
-        return variants
-
-    # combining diacritics variants
-    for i in range(1, 3):
-        variants.append(_apply_combining(text, intensity=i))
-        if len(variants) >= max_variants:
-            return variants
-
-    # pyfiglet ascii art styles (if available)
+    # Add ASCII art variants if pyfiglet is available
     if pyfiglet:
-        # try a larger set of figlet fonts for more uniqueness
+        # Carefully selected fonts that work well with both Latin and Cyrillic
         fonts = [
-            'standard', 'slant', 'big', 'small', 'banner3-D', 'cybersmall', 'bubble', 'digital',
-            'isometric1', 'letters', 'mini', 'ogre', 'smslant', 'larry3d', 'starwars', 'smscript',
-            'doh', 'epic', 'block', 'rounded'
+            'standard', 'slant', 'small', 'big', 'block', 'bubble',
+            'digital', 'mini', 'rounded', 'banner3-D', 'letters',
+            'cybermedium', 'cyberlarge', 'doom'
         ]
         for f in fonts:
             try:
-                variants.append(pyfiglet.figlet_format(text, font=f))
+                art = pyfiglet.figlet_format(text, font=f)
+                if art and art.strip():  # Only add if we got valid output
+                    variants.add(art)
             except Exception:
                 continue
-            if len(variants) >= max_variants:
-                return variants
 
-    # fallback: original
-    if text not in variants:
-        variants.append(text)
-    return variants
+    # Add original text if not already included
+    variants.add(text)
+    
+    # Convert set to list and ensure we have exactly max_variants
+    result = list(variants)
+    
+    # If we don't have enough variants, add more using combining characters
+    while len(result) < max_variants:
+        # Create new variants using different combining character patterns
+        new_variant = text
+        for c in new_variant:
+            if random.random() < 0.5:
+                # Add random combining diacritical marks
+                marks = [chr(x) for x in range(0x0300, 0x0370)]
+                new_variant = new_variant.replace(c, c + random.choice(marks))
+        result.append(new_variant)
+    
+    # If we have too many variants, trim to max_variants
+    result = result[:max_variants]
+    
+    return result
 

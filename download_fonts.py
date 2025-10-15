@@ -15,7 +15,7 @@ from tqdm import tqdm
 GOOGFONTS_ZIP = "https://github.com/google/fonts/archive/refs/heads/main.zip"
 
 
-def download_and_extract(output_dir: str, subset: str | None = None):
+def download_and_extract(output_dir: str, subset: str | None = None, min_quality: str | None = None):
     os.makedirs(output_dir, exist_ok=True)
     print("Downloading Google Fonts archive (this can be large)...")
     r = requests.get(GOOGFONTS_ZIP, stream=True)
@@ -47,8 +47,11 @@ def download_and_extract(output_dir: str, subset: str | None = None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--output', '-o', default='fonts', help='output dir for fonts')
+    ap.add_argument('--subset', '-s', default='latin,cyrillic', help='font subsets to include (comma-separated)')
+    ap.add_argument('--min-quality', '-q', default='ttf', choices=['ttf', 'otf', 'woff', 'woff2'],
+                   help='minimum font quality to include')
     args = ap.parse_args()
-    download_and_extract(args.output)
+    download_and_extract(args.output, args.subset, args.min_quality)
 
 
 if __name__ == '__main__':
