@@ -1,4 +1,4 @@
-# Telegram Fonts Bot
+# The Fonts @fontstgbot (Made by @thebitsamurai)
 
 This project is a ready starter for a Telegram bot that renders user text using many fonts downloaded from Google Fonts.
 
