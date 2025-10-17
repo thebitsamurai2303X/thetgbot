@@ -1,6 +1,6 @@
 The Fonts @fontstgbot (Made by @thebitsamurai)
 
-> Be sure to follow the developer's **Telegram channel:@ytdlpdeveloper**
+> Be sure to follow the developer's **Telegram channel**: t.me/ytdlpdeveloper
 
 > [! WARNING]
 > **The bot is still under development.** Functionality may be incomplete, and you might encounter bugs.
