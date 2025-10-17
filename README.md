@@ -1,6 +1,8 @@
 # ✍️ The Fonts Bot (@fontstgbot)
 
 Made by [@thebitsamurai](https://t.me/thebitsamurai)
+Other projects: .[**Music Jacker (YT Music Downloader)**](https://t.me/ytdlpload_bot
+Telegram channel: .[**Samurai Coding**](https://t.me/ytdlpdeveloper
 
 ---
 
