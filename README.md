@@ -1,5 +1,6 @@
-# The Fonts @fontstgbot (Made by @thebitsamurai)
+The Fonts @fontstgbot (Made by @thebitsamurai)
 
+> Be sure to follow the developer's **Telegram channel:@ytdlpdeveloper**
 
 > [! WARNING]
 > **The bot is still under development.** Functionality may be incomplete, and you might encounter bugs.
@@ -47,3 +48,4 @@ Notes
 ```bash
 Other projects: t.me/ytdlpload_bot
 ```
+
