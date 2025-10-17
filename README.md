@@ -1,51 +1,54 @@
-The Fonts @fontstgbot (Made by @thebitsamurai)
+# ✍️ The Fonts Bot (@fontstgbot)
 
-> Be sure to follow the developer's **Telegram channel**: t.me/ytdlpdeveloper
+Made by [@thebitsamurai](https://t.me/thebitsamurai)
 
-> [! WARNING]
-> **The bot is still under development.** Functionality may be incomplete, and you might encounter bugs.
+---
+
+## 🚨 Important Notice (Development Stage)
+
+> ⚠️ **WARNING: The bot is still under development.**
 > 
-> Please report any issues you find to **@thebitsamurai** on Telegram. Thank You!
+> Functionality may be incomplete, and you might encounter bugs.
+> Please report any issues you find to **@thebitsamurai** on Telegram.
+> 
+> *A special thanks for your feedback!*
 
-This project is a ready starter for a Telegram bot that renders user text using many fonts downloaded from Google Fonts. The bot is available on 8 languages: 1. Arabian, 2. Russian 3. Arabic. 4. Spanish 5. Azerbaijani 6. Turkish 7. French 8. German 
+---
 
-Files:
-- `bot.py` - Telegram bot entrypoint
-- `renderer.py` - Image rendering utilities (Pillow)
-- `download_fonts.py` - Script to download and extract Google Fonts
-- `requirements.txt` - Python deps
-- `.env.example` - Example environment variables
-- `fonts/` - Directory where downloaded fonts are stored
+## 💡 About The Project
 
-Setup
+This project is a ready starter for a Telegram bot that renders user text using many fonts downloaded from **Google Fonts**.
 
-1. Create virtualenv and install deps:
+The bot is currently available in **8 languages**:
+1.  English
+2.  Russian
+3.  Arabic
+4.  Spanish
+5.  Azerbaijani
+6.  Turkish
+7.  French
+8.  German
+
+---
+
+## 📂 Project Structure
+
+* `bot.py` - Telegram bot entrypoint
+* `renderer.py` - Image rendering utilities (**Pillow**)
+* `download_fonts.py` - Script to download and extract Google Fonts
+* `requirements.txt` - Python dependencies
+* `.env.example` - Example environment variables
+* `fonts/` - Directory where downloaded fonts are stored
+
+---
+
+## 🛠️ Setup and Run
+
+### 1. Installation
+
+Create a virtual environment and install dependencies:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # Or `.venv\Scripts\activate` on Windows
 pip install -r requirements.txt
-```
-
-2. Copy `.env.example` to `.env` and set `TELEGRAM_TOKEN`.
-
-3. Run the font downloader to populate `fonts/`:
-
-```bash
-python download_fonts.py --output fonts --subset "latin,latin-ext" --min_quality ttf
-```
-
-4. Run the bot:
-
-```bash
-python bot.py
-```
-
-Notes
-- Fonts must be used according to their licenses. Google Fonts are generally permissive for this use-case.
-- The downloader can take time and disk space; consider selecting subsets like `latin` to reduce size.
-
-```bash
-Other projects: t.me/ytdlpload_bot
-```
-
