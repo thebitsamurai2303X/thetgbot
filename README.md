@@ -1,5 +1,11 @@
 # The Fonts @fontstgbot (Made by @thebitsamurai)
 
+
+> [! WARNING]
+> **The bot is still under development.** Functionality may be incomplete, and you might encounter bugs.
+> 
+> Please report any issues you find via the **Issues** ta
+
 This project is a ready starter for a Telegram bot that renders user text using many fonts downloaded from Google Fonts. The bot is available on 8 languages: 1. Arabian, 2. Russian 3. Arabic. 4. Spanish 5. Azerbaijani 6. Turkish 7. French 8. German 
 
 Files:
